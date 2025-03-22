@@ -1,5 +1,6 @@
 "use client";
 
+import { login } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,6 +18,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+import { LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ApiSuccess } from "@/types/api";
 
 export default function AuthSendCodeForm() {
   const form = useForm<AuthSendCodeSchema>({
@@ -25,9 +30,21 @@ export default function AuthSendCodeForm() {
       email: "",
     },
   });
+  const router = useRouter();
+
+  const { mutateAsync, status } = useMutation({
+    mutationFn: login,
+    onSuccess: (data: ApiSuccess) => {
+      toast.success(data.message);
+      router.push(`/sign-in/confirm?email=${form.getValues("email")}`);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
 
   function onSubmit(values: AuthSendCodeSchema) {
-    toast(<pre>{JSON.stringify(values, null, 2)}</pre>);
+    mutateAsync(values);
   }
 
   return (
@@ -42,7 +59,12 @@ export default function AuthSendCodeForm() {
                 E-mail
               </FormLabel>
               <FormControl>
-                <Input className="p-5" placeholder="Digite aqui" {...field} />
+                <Input
+                  disabled={status === "pending"}
+                  className="p-5"
+                  placeholder="Digite aqui"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -51,7 +73,11 @@ export default function AuthSendCodeForm() {
         <Button
           size="lg"
           className="w-full border-0 border-b-4 border-[#232779] cursor-pointer"
+          disabled={status === "pending"}
         >
+          {status === "pending" && (
+            <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+          )}
           Enviar código
         </Button>
       </form>

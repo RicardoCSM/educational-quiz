@@ -10,7 +10,7 @@ export default function NavUser({ user }: { user: User }) {
       <SidebarMenuItem>
         <div className="flex items-center space-x-4">
           <Avatar className="size-8">
-            <AvatarImage src={user.avatar} alt={user.name} />
+            <AvatarImage src="" alt={user.name} />
             <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-left text-xl leading-tight">

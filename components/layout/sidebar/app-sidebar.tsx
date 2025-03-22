@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import NavUser from "./nav-user";
-import { user } from "@/mock-data/user";
 import {
   HomeRegular,
   BuildingTownhouseRegular,
@@ -18,6 +17,7 @@ import {
   SettingsRegular,
 } from "@fluentui/react-icons";
 import { NavMain } from "./nav-main";
+import { useAuth } from "@/store/useAuth";
 
 const data = {
   main: [
@@ -47,6 +47,8 @@ const data = {
 export default function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useAuth();
+
   return (
     <Sidebar {...props} className="py-8 px-4">
       <SidebarHeader>
@@ -54,7 +56,7 @@ export default function AppSidebar({
       </SidebarHeader>
       <SidebarContent className="pt-8 space-y-8">
         <SidebarSeparator />
-        <NavUser user={user} />
+        {user && <NavUser user={user} />}
         <SidebarSeparator />
         <NavMain items={data.main} />
       </SidebarContent>

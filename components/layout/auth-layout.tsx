@@ -19,8 +19,8 @@ export default function AuthLayout({
           <Image
             src="/images/illustration.svg"
             alt="Illustration"
-            layout="fill"
-            objectFit="cover"
+            fill
+            className="object-cover"
           />
         </div>
         <Image
@@ -32,7 +32,7 @@ export default function AuthLayout({
         />
       </div>
       <div className="flex min-h-screen items-center justify-center py-12">
-        <Card className="mx-auto w-[464px] border-0 shadow-xl">
+        <Card className="mx-auto w-screen md:w-[464px] border-0 shadow-xl">
           <CardContent className="grid gap-6 p-8">
             <div className="grid gap-4 text-center">
               <div className="flex w-full justify-center">
