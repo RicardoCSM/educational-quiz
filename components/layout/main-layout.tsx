@@ -11,10 +11,10 @@ export default function MainLayout({ children, header }: MainLayoutProps) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="sticky px-55 top-0 flex h-26 shrink-0 items-center gap-2 border-b bg-background">
+        <header className="sticky px-16 xl:px-55 top-0 flex h-26 shrink-0 items-center gap-2 border-b bg-background">
           {header}
         </header>
-        <div className="flex flex-1 flex-col gap-4 bg-accent px-55">
+        <div className="flex flex-1 flex-col gap-4 bg-accent px-16 xl:px-55">
           {children}
         </div>
       </SidebarInset>

@@ -40,7 +40,10 @@ export default function UserProfileForm({ user }: UserProfileFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-8 py-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex w-full items-center flex-col lg:flex-row gap-8 py-8"
+      >
         <Avatar className="size-[250px]">
           <AvatarImage src={user.avatar} alt={user.name} />
           <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
