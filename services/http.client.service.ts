@@ -1,6 +1,6 @@
 "use client";
 
-import { signout } from "@/app/actions/auth";
+import { signOut } from "@/app/actions/auth";
 import { createHttpClient } from "./http.service";
 import { AxiosError } from "axios";
 
@@ -8,7 +8,7 @@ const httpClient = createHttpClient();
 
 const authErrorInterceptor = async (error: AxiosError) => {
   if (error.response && error.response.status === 401) {
-    await signout();
+    await signOut();
     window.location.replace("/auth/login");
   }
 
