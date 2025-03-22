@@ -5,7 +5,7 @@
 ### Install packages
 
 ```shell
-npm i
+npm install --legacy-peer-deps
 ```
 
 ### Start the app
