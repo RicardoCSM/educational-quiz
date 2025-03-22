@@ -36,11 +36,15 @@ export default function UserProfileForm() {
   });
   const { mutateAsync, status } = useMutation({
     mutationFn: updateUserInfo,
-    onSuccess: (data: { message: string; user: User }) => {
-      toast.success(data.message);
-      setUser(data.user);
-      form.setValue("name", data.user.name);
-      form.setValue("email", data.user.email);
+    onSuccess: (data: { success: boolean; message: string; user?: User }) => {
+      if (data.success && data.user) {
+        toast.success(data.message);
+        setUser(data.user);
+        form.setValue("name", data.user.name);
+        form.setValue("email", data.user.email);
+      } else {
+        toast.error(data.message);
+      }
     },
     onError: (error: Error) => {
       toast.error(error.message);

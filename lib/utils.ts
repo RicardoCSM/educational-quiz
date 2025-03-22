@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function isAxiosError<ResponseType>(
-  error: unknown
+  error: unknown,
 ): error is AxiosError<ResponseType> {
   return axios.isAxiosError(error);
 }

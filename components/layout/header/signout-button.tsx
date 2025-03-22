@@ -1,8 +1,9 @@
 "use client";
 
-import { signout } from "@/app/actions/auth";
+import { signOut } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/store/useAuth";
+import { ApiResponse } from "@/types/api";
 import { SignOutRegular } from "@fluentui/react-icons";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -13,16 +14,15 @@ export default function SignOutButton() {
   const { removeUser } = useAuth();
 
   const { mutateAsync, status } = useMutation({
-    mutationFn: signout,
-    onSuccess: (status: boolean) => {
-      if (!status) {
-        toast.error("Erro ao deslogar usuário.");
-        return;
+    mutationFn: signOut,
+    onSuccess: (data: ApiResponse) => {
+      if (data.success) {
+        toast.success(data.message);
+        removeUser();
+        router.push("/sign-in");
+      } else {
+        toast.error(data.message);
       }
-
-      removeUser();
-      toast.success("Usuário deslogado com sucesso.");
-      router.push("/sign-in");
     },
     onError: (error: Error) => {
       toast.error(error.message);

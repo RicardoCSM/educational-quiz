@@ -32,7 +32,7 @@ export const createHttpClient = (): AxiosInstance => {
         console.error("Unauthorized access");
       }
       return Promise.reject(error);
-    }
+    },
   );
 
   return httpClient;

@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import CryptoJS from "crypto-js";
 import { isAxiosError } from "@/lib/utils";
-import { ApiError, ApiSuccess } from "@/types/api";
+import { ApiError, ApiResponse } from "@/types/api";
 import httpClient from "@/services/http.server.service";
 import { AuthSendCodeSchema } from "@/lib/validations/authSendCode";
 import { LoginResponse } from "@/types/login-response";
@@ -25,16 +25,20 @@ export async function clearToken(): Promise<void> {
   (await cookies()).set("access_token", "", { expires: new Date(0) });
 }
 
-export async function login(data: AuthSendCodeSchema): Promise<ApiSuccess> {
+export async function login(data: AuthSendCodeSchema): Promise<ApiResponse> {
   try {
     await httpClient.post("login", data);
 
     return {
+      success: true,
       message: "Código enviado com sucesso!",
     };
   } catch (e: unknown) {
     if (isAxiosError<ApiError>(e)) {
-      throw new Error(e.response?.data?.error || "Erro ao enviar código");
+      return {
+        success: false,
+        message: e.response?.data?.error || "Erro ao enviar código",
+      };
     }
 
     throw new Error("Erro ao enviar código");
@@ -42,8 +46,8 @@ export async function login(data: AuthSendCodeSchema): Promise<ApiSuccess> {
 }
 
 export async function confirmCode(
-  data: AuthConfirmCodeSchema
-): Promise<ApiSuccess> {
+  data: AuthConfirmCodeSchema,
+): Promise<ApiResponse> {
   try {
     const res = await httpClient.post("confirmCode", data);
     const response: LoginResponse = res.data;
@@ -51,7 +55,7 @@ export async function confirmCode(
       const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
       const encryptedToken = CryptoJS.AES.encrypt(
         response.token,
-        SECRET_KEY
+        SECRET_KEY,
       ).toString();
       (await cookies()).set("access_token", encryptedToken, {
         expires,
@@ -61,28 +65,38 @@ export async function confirmCode(
     }
 
     return {
+      success: true,
       message: "Usuário logado com sucesso!",
     };
   } catch (e: unknown) {
     if (isAxiosError<ApiError>(e)) {
-      throw new Error(e.response?.data?.error || "Erro ao logar usuário");
+      return {
+        success: false,
+        message: e.response?.data?.error || "Erro ao enviar código",
+      };
     }
 
     throw new Error("Erro ao logar usuário");
   }
 }
 
-export async function signout(): Promise<boolean> {
+export async function signOut(): Promise<ApiResponse> {
   try {
     await httpClient.delete(`logOut`);
     await clearToken();
 
-    return true;
+    return {
+      success: true,
+      message: "Usuário deslogado com sucesso!",
+    };
   } catch (e) {
     if (isAxiosError<ApiError>(e)) {
-      throw new Error(e.response?.data?.error || "Erro ao deslogar usuário");
+      return {
+        success: false,
+        message: e.response?.data?.error || "Erro ao enviar código",
+      };
     }
 
-    return false;
+    throw new Error("Erro ao deslogar usuário");
   }
 }

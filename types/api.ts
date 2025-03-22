@@ -1,4 +1,5 @@
-export interface ApiSuccess {
+export interface ApiResponse {
+  success: boolean;
   message: string;
 }
 

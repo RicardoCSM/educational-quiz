@@ -15,7 +15,7 @@ import {
   authConfirmCodeSchema,
   AuthConfirmCodeSchema,
 } from "@/lib/validations/authConfirmCode";
-import { ApiSuccess } from "@/types/api";
+import { ApiResponse } from "@/types/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
@@ -38,9 +38,13 @@ export default function AuthCodeConfirmationForm() {
 
   const { mutateAsync, status } = useMutation({
     mutationFn: confirmCode,
-    onSuccess: (data: ApiSuccess) => {
-      toast.success(data.message);
-      router.push("/profile");
+    onSuccess: (data: ApiResponse) => {
+      if (data.success) {
+        toast.success(data.message);
+        router.push("/profile");
+      } else {
+        toast.error(data.message);
+      }
     },
     onError: (error: Error) => {
       toast.error(error.message);
