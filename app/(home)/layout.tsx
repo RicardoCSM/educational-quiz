@@ -1,6 +1,6 @@
 "use client";
 
-import { AuthProvider } from "@/components/providers/AuthProvider";
+import { AuthProvider } from "@/components/providers/auth-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient();
 
